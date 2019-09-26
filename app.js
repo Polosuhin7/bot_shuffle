@@ -1,37 +1,22 @@
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio')
 const Telegraf = require('telegraf');
-const request = require('request');
-const token = '982235022:AAF2-shXycJDc5tVRlT_QSwNfyRroPLWjtQ';
+// const request = require('request');
+const token = '847696441:AAGMEBOF5rKEYUaeGIy-e1gAOvbKi3UlQ_k';
 
-const TelegramBot = require('node-telegram-bot-api');
+const bot = new Telegraf(token)
+bot.command('oldschool', (ctx) => ctx.reply('Hello'))
+bot.command('modern', ({ reply }) => reply('Yo'))
+bot.command('hipster', Telegraf.reply('λ'))
+bot.launch()
 
-// replace the value below with the Telegram token you receive from @BotFather
-
-// Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, {polling: true});
-
-// Matches "/echo [whatever]"
-bot.onText(/\/echo (.+)/, (msg, match) => {
-  // 'msg' is the received Message from Telegram
-  // 'match' is the result of executing the regexp above on the text content
-  // of the message
-
-  const chatId = msg.chat.id;
-  const resp = match[1]; // the captured "whatever"
-
-  // send back the matched "whatever" to the chat
-  bot.sendMessage(chatId, resp);
+bot.use(async (ctx, next) => {
+  const start = new Date()
+  await next()
+  const ms = new Date() - start
+  console.log('Response time %sms', ms)
 });
-
-// Listen for any kind of message. There are different kinds of
-// messages.
-bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-
-  // send a message to the chat acknowledging receipt of their message
-  bot.sendMessage(chatId, 'Received your message');
-});
+bot.on('error', err => console.warn(err))
 
 // class Shuffle {
 //   constructor(URL, timeUpdate = 1e3 * 60) {
