@@ -4,8 +4,6 @@ const Telegraf = require('telegraf');
 const request = require('request');
 const token = '982235022:AAF2-shXycJDc5tVRlT_QSwNfyRroPLWjtQ';
 
-const Telegraf = require('telegraf')
-
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start((ctx) => ctx.reply('Welcome'))
 bot.help((ctx) => ctx.reply('Send me a sticker'))
