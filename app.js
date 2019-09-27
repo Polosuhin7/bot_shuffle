@@ -20,7 +20,7 @@ bot.use(async (ctx, next) => {
 bot.on('error', err => console.warn(err))
 
 class Shuffle {
-  constructor(URL, timeUpdate = 1e3 * 60) {
+  constructor(URL, timeUpdate = 1e3 * 5) {
     this.url = URL;
     this.currentContext = '';
     this.getSite();
@@ -28,7 +28,15 @@ class Shuffle {
   }
   async getSite() {
     try {
-      const browser = await puppeteer.launch({headless: false}) ; 
+      const browser = await puppeteer.launch({
+        executablePath: '/opt/google/chrome/chrome',
+        args: [
+            '--disable-setuid-sandbox',
+            '--no-sandbox',
+            '--disable-gpu',
+            '--no-first-run',
+        ]
+    }) ; 
       const page = await browser.newPage();
       await page.goto(this.url) ; 
       await page.emulateMedia('screen') ; 
@@ -61,6 +69,6 @@ class Shuffle {
   }
 }
 const addidasShuffle = new Shuffle('https://www.adidas.ru/yeezy')
-setTimeout(() => {
-  addidasShuffle.clearTimer();
-}, 30000);
+// setTimeout(() => {
+//   addidasShuffle.clearTimer();
+// }, 30000);
