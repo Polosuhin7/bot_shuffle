@@ -13,4 +13,4 @@ bot.launch()
 
 const addidasShuffle = new Shuffle('https://www.adidas.ru/yeezy',
   /\bBOOST 350\b|\bboost 350\b\bBOOST 350 V2\b/g);
-addidasShuffle.onchange = bot.telegram.sendMessage('Что то поменялось, перейдите по ссылке https://www.adidas.ru/yeezy');
+addidasShuffle.onchange = bot.telegram.sendMessage.bind(this, 'Что то поменялось, перейдите по ссылке https://www.adidas.ru/yeezy');
