@@ -1,13 +1,16 @@
-const Emitter = require("events");
 const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const UserAgent = require('user-agents')
 class Shuffle {
-  constructor(URL, timeUpdate = 1e3 * 60) {
+  constructor(URL, wtfind, timeUpdate = 1e3 * 60) {
     this.url = URL;
     this.currentContext = '';
+    this.wtfind = wtfind;
     this.getSite();
-    this.timer = this.setTaimer(timeUpdate)
+    this.timer = setInterval(() => {
+      this.checkSiteState()
+    }, timeUpdate);
+    this.callback = '';
   }
   async getSite() {
     try {
@@ -28,25 +31,12 @@ class Shuffle {
     await this.getSite();
     const $ = cheerio.load(this.currentContext);
     const body = $('body').text()
-    // if(body.match(/\bBOOST 700\b|\bboost 700\b\bBOOST 700 V2\b/g)) {
+    if(body.match(this.wtfind)) {
       this.onchange()
-    // }
-  }
-  onchange(callback) {
-    if(callback) {
-      this.callback = callback;
-      this.callback()
     }
     else {
-      this.callback();
+      console.log('Не надено')
     }
-
-  }
-  setTaimer(time) {
-    const timer = setInterval(() => {
-      this.checkSiteState()
-    }, time)
-    return timer
   }
   clearTimer() {
     clearInterval(this.timer)
